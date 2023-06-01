@@ -14,7 +14,6 @@ public class PlayerController : MonoBehaviour
     public bool hasPowerup;
     public bool PUonGoing;
     public bool OG;
-    public GameObject powerupIndicator;
     void Start()
     {
         playerRB = GetComponent<Rigidbody>();
@@ -25,34 +24,31 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (transform.position.y < -1)
+        if (transform.position.y < -10)
         {
-            transform.position = Vector3.zero;  
+            Destroy(gameObject);
         }
         if (!hasPowerup && PUonGoing)
         {
             float forwardInput = Input.GetAxis("Vertical");
             playerRB.AddForce(focalPoint.transform.forward * speed * forwardInput);
-            powerupIndicator.transform.position = transform.position + new Vector3(0, -0.5f, 0);
+            
         }
         else if (!hasPowerup && !PUonGoing)
         {
             StartCoroutine(PowerupCDR());
             float forwardInput = Input.GetAxis("Vertical");
             playerRB.AddForce(focalPoint.transform.forward * speed * forwardInput);
-            powerupIndicator.transform.position = transform.position + new Vector3(0, -0.5f, 0);
         }
         else if (!hasPowerup && !OG)
         {
             float forwardInput = Input.GetAxis("Vertical");
             playerRB.AddForce(focalPoint.transform.forward * speed * forwardInput * 4);
-            powerupIndicator.transform.position = transform.position + new Vector3(0, -0.5f, 0);
         }
         else
         {
             float forwardInput = Input.GetAxis("Vertical");
             playerRB.AddForce(focalPoint.transform.forward * speed * forwardInput * 2);
-            powerupIndicator.transform.position = transform.position + new Vector3(0, -0.5f, 0);
         }
         if (Input.GetKey(KeyCode.Space) && OG)
         {
@@ -66,7 +62,6 @@ public class PlayerController : MonoBehaviour
         PUonGoing = true;
         yield return new WaitForSeconds(5);
         ParticleSystem.Play();
-        powerupIndicator.gameObject.SetActive(true);
         hasPowerup = true;
         PUonGoing = false;
 
